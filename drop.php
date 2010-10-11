@@ -3,7 +3,7 @@
 	# edit these two numbers to change what we're testing:
 	#
 
-	$chance = 10000;
+	$chance = 1000;
 	$trials = 10000;
 
 	#
@@ -47,3 +47,35 @@
 	echo "\n";
 	echo "Luckiest loots: $min\n";
 	echo "Unluckiest loots: $max\n";
+
+
+	#
+	# build a graph!
+	#
+
+	$buckets = array();
+	$bucket_count = 10;
+	$max_fig = $chance * 3;
+	for ($i=0; $i<$bucket_count; $i++) $buckets[$i] = array();
+
+	foreach ($drops as $drop){
+		if ($drop > $max_fig) continue;
+		$bucket = floor($bucket_count * $drop / $max_fig);
+		$buckets[$bucket][] = $drop;
+	}
+
+	$most_bucket = 0;
+	foreach ($buckets as $b) $most_bucket = max($most_bucket, count($b));
+
+
+	for ($i=0; $i<$bucket_count; $i++){
+
+		$min = min($buckets[$i]);
+		$max = max($buckets[$i]);
+		$num = count($buckets[$i]);
+
+		$stars = str_repeat('*', round(20 * $num / $most_bucket));
+		echo "$i : $stars\n";
+	}
+
+	#print_r($buckets);
